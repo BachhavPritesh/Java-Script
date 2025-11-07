@@ -1,0 +1,1 @@
+foreach loop and forof loop borth are same but the syntax method is differ in both.

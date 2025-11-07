@@ -1,0 +1,11 @@
+ .wrong{
+            color: red;
+        }
+  .weight{
+    font-weight: bolder;
+    font-style: italic;
+  }
+
+.back{
+    background-color: blue;
+}
