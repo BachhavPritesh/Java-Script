@@ -435,7 +435,15 @@ body::before {
     transform: translateY(-3px) scale(1.05);
     box-shadow: var(--glow-accent), 0 10px 20px rgba(0, 0, 0, 0.3);
 }
-
+#time-30, #time-60, #time-90{
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    color: var(--darker);
+    box-shadow: 0 5px 15px rgba(0, 243, 255, 0.4);
+    width: 5vw;
+    height: 7vh;
+    border-radius: 0.5rem;
+    border: none;
+}
 .start-btn:disabled {
     background: rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.3);
