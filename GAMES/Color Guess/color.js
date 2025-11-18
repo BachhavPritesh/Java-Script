@@ -16,7 +16,6 @@ let colors = [];
 let num = 6;
 let gameOver = false;
 
-// Initialize game
 function initGame() {
     loadBestStreak();
     displayContent();
@@ -56,13 +55,19 @@ function generateColors(count) {
 
 // Set up the game
 function setupGame() {
+    
+    colorBoxes.forEach(box => {
+        box.style.border = "none";
+        box.style.boxShadow = "none";
+    });
+
     gameOver = false;
     messageDisplay.textContent = "Pick the correct color!";
     messageDisplay.style.color = "white";
-    
+
     colors = generateColors(num);
     pickCorrectColor = colors[Math.floor(Math.random() * colors.length)];
-    
+
     colorDisplay.textContent = pickCorrectColor.toUpperCase();
 
     // Set colors for all boxes and show/hide based on difficulty
@@ -80,78 +85,95 @@ function setupGame() {
 // Handle color box click
 function handleColorClick(event) {
     if (gameOver) return;
-    
+
     const clickedBox = event.target;
-    if (!clickedBox.classList.contains('color-box')) return;
-    
     const clickedColor = clickedBox.style.backgroundColor;
-    
+
+ 
     if (clickedColor === pickCorrectColor) {
         messageDisplay.textContent = "Correct! Well done!";
         messageDisplay.style.color = "#4CAF50";
         currentStreak++;
-        
+
+        if(currentStreak>=3){
+            messageDisplay.textContent = 'Streak!';
+            messageDisplay.style.color = "green";
+        }
+
         if (currentStreak > bestStreak) {
             bestStreak = currentStreak;
             localStorage.setItem('bestStreak', bestStreak.toString());
+            colorDisplay.style.fontWeight = "bold"
         }
-        
+
+        if(currentStreak === 1){
+            messageDisplay.textContent = "First Win!";
+        }
+        else{
+            messageDisplay.textContent = "New best Streak!";
+        }
+
         displayContent();
         gameOver = true;
-        
-        // Change all boxes to correct color with animation
+
+        clickedBox.style.border = "4px solid #FFD700";
+        clickedBox.style.boxShadow = "0 0 15px #FFD700";
+
         colorBoxes.forEach(box => {
             if (box.style.display !== "none") {
                 box.style.backgroundColor = pickCorrectColor;
                 box.style.opacity = "1";
             }
         });
-        
+
     } else {
-        // Wrong guess
         messageDisplay.textContent = "Wrong! Try again!";
         messageDisplay.style.color = "#f44336";
         clickedBox.style.opacity = "0.3";
-        currentStreak = 0;
+       
         displayContent();
+          clickedBox.classList.add('shake');
+          currentStreak = 0;
     }
 }
 
-// Event Listeners
-newRoundBtn.addEventListener('click', function() {
+
+
+newRoundBtn.addEventListener('click', function () {
     setupGame();
 });
 
-easyBtn.addEventListener('click', function() {
+easyBtn.addEventListener('click', function () {
     num = 3;
     easyBtn.classList.add('active');
     hardBtn.classList.remove('active');
+    easyBtn.style.backgroundColor = "green";
+    hardBtn.style.background = "transparent";
     setupGame();
 });
 
-hardBtn.addEventListener('click', function() {
+hardBtn.addEventListener('click', function () {
     num = 6;
     hardBtn.classList.add('active');
     easyBtn.classList.remove('active');
+    hardBtn.style.backgroundColor = "red";
+    easyBtn.style.backgroundColor = "transparent";
     setupGame();
 });
 
-resetStreakBtn.addEventListener('click', function() {
+resetStreakBtn.addEventListener('click', function () {
     bestStreak = 0;
     currentStreak = 0;
     localStorage.setItem('bestStreak', '0');
     displayContent();
 });
 
-// Add event listener for color boxes container
 document.querySelector('.color-box-container').addEventListener('click', handleColorClick);
 
-// Initialize the game when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initGame();
 });
 
-// Also initialize if DOM is already loaded
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initGame);
 } else {
